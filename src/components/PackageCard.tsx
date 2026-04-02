@@ -38,7 +38,7 @@ export default function PackageCard({ pkg, featured }: { pkg: PublicPackage; fea
           </div>
         )}
         <div className={`text-[10px] font-bold uppercase tracking-widest mt-3 ${featured ? 'text-red-500' : 'text-red-600'}`}>
-           {pkg.durationInDays} NGÀY TẬP LUYỆN
+           {pkg.durationDays} NGÀY TẬP LUYỆN
         </div>
       </div>
 
