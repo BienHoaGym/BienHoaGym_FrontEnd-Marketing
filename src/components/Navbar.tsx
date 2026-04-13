@@ -3,82 +3,118 @@ import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-const phone = process.env.NEXT_PUBLIC_PHONE || '0901234567'
+const phone = process.env.NEXT_PUBLIC_PHONE || '0908 581 517'
+const loginUrl = process.env.NEXT_PUBLIC_MANAGEMENT_URL || 'http://localhost:10000'
+
 const NAV_LINKS = [
-  { href: '/features',  label: 'Tiện ích',  external: false },
-  { href: '/packages',  label: 'Gói tập',   external: false },
-  { href: '/schedule',  label: 'Lịch tập',  external: false },
-  { href: '/classes',   label: 'Lớp học',   external: false },
-  { href: '/about',     label: 'Về chúng tôi', external: false },
+  { href: '/features', label: 'Tiện ích', external: false },
+  { href: '/classes', label: 'Lớp học', external: false },
+  { href: '/schedule', label: 'Lịch tập', external: false },
+  { href: '/packages', label: 'Ưu đãi', external: false },
+  { href: '/about', label: 'Về chúng tôi', external: false },
+  { href: '/blog', label: 'Blog', external: false },
 ]
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
 
-  // Header hiện tại đã được fix cứng nền trắng và shadow để đồng nhất trên mọi trang
   return (
-    <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-xl shadow-sm border-b border-neutral-200 h-16 transition-all">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16">
-          
-          {/* Logo - Cố định màu đen */}
-          <Link href="/" className="flex items-center gap-2 group shrink-0">
-            <span className="text-xl group-hover:scale-110 transition-transform">💪</span>
-            <span className="font-display text-lg tracking-widest leading-none text-black">
-              GYM<br className="hidden" /> BIÊN HÒA
-            </span>
+    <nav className="fixed top-0 w-full z-[100] bg-white text-black shadow-md border-b border-neutral-100 h-20 transition-all">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-full">
+        <div className="flex items-center justify-between h-full">
+
+          {/* LEFT: Logo & Brand */}
+          <Link href="/" className="flex items-center gap-3 group shrink-0">
+            <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center p-0.5 group-hover:rotate-12 transition-transform shadow-lg">
+                <img src="/images/logo_circle.jpg" alt="Logo" className="w-full h-full object-cover rounded-full" />
+            </div>
+            <div className="flex flex-col">
+                <span className="font-display text-xl tracking-tighter leading-none font-black text-black">
+                    BIEN HOA <span className="text-red-600">GYM</span>
+                </span>
+                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">Elite Fitness</span>
+            </div>
           </Link>
 
-          {/* Desktop Nav - Luôn hiển thị màu sắc rõ ràng, không phụ thuộc cuộn chuột */}
-          <div className="hidden lg:flex items-center gap-1">
+          {/* CENTER: Navigation (Desktop) */}
+          <div className="hidden xl:flex items-center gap-2">
             {NAV_LINKS.map(l => {
-              const isActive = !l.external && pathname === l.href
-              return l.external ? (
-                <a key={l.href} href={l.href} className="px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors rounded-lg text-neutral-600 hover:text-red-600">
-                  {l.label}
-                </a>
-              ) : (
-                <Link key={l.href} href={l.href} className={`px-3 py-2 text-xs font-bold uppercase tracking-wider transition-colors rounded-lg ${isActive ? 'text-red-600 bg-red-50' : 'text-neutral-600 hover:text-red-600'}`}>
+              const isActive = pathname === l.href
+              return (
+                <Link 
+                  key={l.href} 
+                  href={l.href} 
+                  className={`px-4 py-2 text-[11px] font-black uppercase tracking-widest transition-all hover:text-red-600 ${isActive ? 'text-red-600' : 'text-neutral-600'}`}
+                >
                   {l.label}
                 </Link>
               )
             })}
           </div>
 
-          {/* CTA & Hotline - Cố định style */}
-          <div className="flex items-center gap-3">
-            <a href={`tel:${phone.replace(/\s/g, '')}`} className="hidden md:flex items-center gap-1 text-sm font-bold text-neutral-600 hover:text-red-600 transition-colors">
-              📞 {phone}
+          {/* RIGHT: Hotline, Login, CTA */}
+          <div className="flex items-center gap-4">
+            {/* Hotline (Always visible on large screens) */}
+            <a 
+              href={`tel:${phone.replace(/\s/g, '')}`} 
+              className="hidden md:flex flex-col items-end gap-0.5 group"
+            >
+              <span className="text-[10px] font-black uppercase tracking-widest text-neutral-400 group-hover:text-red-600 transition-colors">Hotline 24/7</span>
+              <span className="text-sm font-black text-black group-hover:text-red-600 transition-colors">{phone}</span>
             </a>
-            <Link href="/register" className="bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-wide px-5 py-2 text-xs transition-all shadow-md">
-              Đăng Ký
+
+            <div className="h-8 w-px bg-neutral-100 hidden md:block mx-1"></div>
+
+            {/* Login Link */}
+            <a 
+              href={loginUrl} 
+              className="hidden lg:block text-[11px] font-black uppercase tracking-widest text-neutral-500 hover:text-black transition-colors"
+            >
+              Đăng nhập
+            </a>
+
+            {/* Main CTA - Visible on Mobile too to increase conversion */}
+            <Link 
+              href="/register" 
+              className="bg-red-600 hover:bg-black text-white font-black uppercase tracking-widest px-6 py-3 text-[11px] transition-all shadow-[0_4px_15px_rgba(220,38,38,0.3)] hover:shadow-none"
+            >
+              Đăng ký ngay
             </Link>
-            
+
             {/* Mobile Toggle */}
-            <button className="text-black lg:hidden p-2 -mr-1 rounded-lg" onClick={() => setOpen(!open)}>
-              <div className="w-5 h-4 flex flex-col justify-between">
-                <span className={`block h-0.5 bg-black transition-all duration-300 ${open ? 'rotate-45 translate-y-[7px]' : ''}`} />
-                <span className={`block h-0.5 bg-black transition-all duration-300 ${open ? 'opacity-0' : ''}`} />
-                <span className={`block h-0.5 bg-black transition-all duration-300 ${open ? '-rotate-45 -translate-y-[7px]' : ''}`} />
+            <button className="text-black xl:hidden p-2 -mr-1" onClick={() => setOpen(!open)}>
+              <div className="w-6 h-5 flex flex-col justify-between items-end">
+                <span className={`block h-[3px] bg-black transition-all duration-300 ${open ? 'w-6 rotate-45 translate-y-[9px]' : 'w-6'}`} />
+                <span className={`block h-[3px] bg-black transition-all duration-300 ${open ? 'opacity-0' : 'w-4'}`} />
+                <span className={`block h-[3px] bg-black transition-all duration-300 ${open ? 'w-6 -rotate-45 -translate-y-[9px]' : 'w-5'}`} />
               </div>
             </button>
           </div>
         </div>
 
-        {/* Mobile Menu - Đồng bộ nền trắng */}
-        <div className={`lg:hidden overflow-hidden transition-all duration-300 ${open ? 'max-h-80 pb-4' : 'max-h-0'}`}>
-          <div className="border-t border-neutral-100 pt-2 space-y-1">
+        {/* MOBILE MENU */}
+        <div className={`xl:hidden absolute top-20 left-0 w-full bg-white shadow-2xl transition-all duration-500 ease-in-out border-t border-neutral-100 ${open ? 'max-h-[100vh] opacity-100 visible' : 'max-h-0 opacity-0 invisible'}`}>
+          <div className="p-6 flex flex-col gap-1">
             {NAV_LINKS.map(l => (
-              <a key={l.href} href={l.href} onClick={() => setOpen(false)} className="block px-4 py-2.5 rounded-lg text-xs font-bold uppercase tracking-wider text-neutral-600 hover:text-red-600">
+              <Link 
+                key={l.href} 
+                href={l.href} 
+                onClick={() => setOpen(false)} 
+                className={`flex items-center justify-between py-4 text-sm font-black uppercase tracking-widest border-b border-neutral-50 last:border-0 ${pathname === l.href ? 'text-red-600' : 'text-neutral-600'}`}
+              >
                 {l.label}
-              </a>
-            ))}
-            <div className="pt-2 mt-2 border-t border-neutral-100 px-4 flex flex-col gap-2">
-              <a href={`tel:${phone.replace(/\s/g, '')}`} className="text-red-600 text-sm font-bold">📞 {phone}</a>
-              <Link href="/register" onClick={() => setOpen(false)} className="bg-red-600 text-white font-bold uppercase tracking-wide text-xs py-3 text-center shadow-md">
-                Đăng Ký Ngay
+                <span className="text-neutral-300">→</span>
               </Link>
+            ))}
+            
+            <div className="mt-6 flex flex-col gap-4">
+                <a href={`tel:${phone.replace(/\s/g, '')}`} className="flex items-center justify-center gap-3 bg-neutral-100 py-4 font-black uppercase tracking-widest text-xs">
+                    📞 {phone}
+                </a>
+                <a href={loginUrl} className="text-center font-black uppercase tracking-widest text-[10px] text-neutral-400 py-2">
+                    Đối tác & Nhân viên Đăng nhập
+                </a>
             </div>
           </div>
         </div>

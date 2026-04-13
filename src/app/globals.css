@@ -81,3 +81,22 @@
 .ticker-wrap { @apply w-full overflow-hidden flex whitespace-nowrap; }
 .ticker-inner { @apply inline-flex animate-[ticker_20s_linear_infinite]; }
 .ticker-inner:hover { animation-play-state: paused; }
+
+@keyframes shimmer { 
+    from { transform: translateX(-100%); } 
+    to { transform: translateX(100%); } 
+}
+.animate-shimmer { animation: shimmer 1.5s linear infinite; }
+
+@keyframes zoomSlow {
+    from { transform: scale(1); }
+    to { transform: scale(1.1); }
+}
+.animate-zoom-slow { animation: zoomSlow 20s ease-in-out infinite alternate; }
+
+/* Custom selection styling */
+::selection {
+    background-color: #dc2626;
+    color: white;
+}
+@keyframes pulse-gentle { 0%, 100% { transform: scale(1); box-shadow: 0 0 20px rgba(220,38,38,0); } 50% { transform: scale(1.05); box-shadow: 0 0 30px rgba(220,38,38,0.5); } } .animate-pulse-gentle { animation: pulse-gentle 2s ease-in-out infinite; }

@@ -2,13 +2,13 @@
 // services/publicApi.ts
 // ✅ Dùng đúng /api/Public/* endpoints (không cần auth)
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5001/api'
+const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10001/api'
 
 type FetchOptions = { revalidate?: number; cache?: RequestCache }
 
 async function apiFetch(url: string, opts: FetchOptions = {}) {
   const res = await fetch(`${BASE}${url}`, {
-    next: { revalidate: opts.revalidate ?? 60 }, // Cache 60 giây
+    next: { revalidate: opts.revalidate ?? 0 }, // Set to 0 to disable caching during testing
     cache: opts.cache,
   } as any)
   if (!res.ok) throw new Error(`API ${url} → HTTP ${res.status}`)
@@ -36,19 +36,22 @@ export interface PublicPackage {
   discountPrice?: number
   finalPrice?: number
   sessionLimit?: number
+  hasPT?: boolean         // Thêm: Check xem gói có PT hay không
 }
 
 export interface PublicClass {
   id: string
   name: string            // Tên field từ backend ClassDto (camelCase)
   description?: string
-  scheduleDay: string
+  classType?: string      // Thêm: Yoga, PT 1-1, Boxing...
+  scheduleDay?: string[]   // Backend trả về List<string>
   startTime: string
   endTime: string
   maxCapacity: number
   currentEnrollment: number
   isActive: boolean
   trainerName?: string
+  trainerPhoto?: string
   className?: string
   availableSlots?: number
   isFull?: boolean
@@ -131,4 +134,12 @@ export const publicApiService = {
       throw e
     }
   },
+
+  /** ✅ Resolve Image Path */
+  getFullImageUrl(url?: string): string | undefined {
+    if (!url) return undefined
+    if (url.startsWith('http') || url.startsWith('data:')) return url
+    const root = BASE.replace('/api', '')
+    return `${root}${url.startsWith('/') ? '' : '/'}${url}`
+  }
 }

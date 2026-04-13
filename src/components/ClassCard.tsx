@@ -11,57 +11,92 @@ const DAY_VI: Record<string, string> = {
   Sunday:'CN' 
 }
 
-const CFG: Record<string, { icon:string; bg:string; text:string; border:string; label:string }> = {
-  yoga:    { icon:'🧘', bg:'bg-neutral-100', text:'text-black', border:'border-neutral-300', label:'Phục hồi & Dẻo dai' },
-  boxing:  { icon:'🥊', bg:'bg-red-50',      text:'text-red-700', border:'border-red-200', label:'Đốt mỡ siêu tốc' },
-  cardio:  { icon:'🏃', bg:'bg-neutral-900', text:'text-white', border:'border-black', label:'Sức bền & Tim mạch' },
-  default: { icon:'🏋️', bg:'bg-white',      text:'text-black', border:'border-neutral-300', label:'Tăng cơ & Sức mạnh' }
+const CFG: Record<string, { icon:string; bg:string; text:string; border:string; label:string; img: string; kcal: string; level: string }> = {
+  yoga:    { icon:'🧘', bg:'bg-neutral-100', text:'text-black', border:'border-neutral-300', label:'Phục hồi & Dẻo dai', img: '/images/lop_yoga.jpeg', kcal: '300-400', level: 'Nhẹ nhàng' },
+  boxing:  { icon:'🥊', bg:'bg-red-50',      text:'text-red-700', border:'border-red-200', label:'Đốt mỡ siêu tốc', img: '/images/anh-gai-xinh-ngau-tap-gym-32.jpg', kcal: '600-800', level: 'Cao' },
+  cardio:  { icon:'🏃', bg:'bg-neutral-900', text:'text-white', border:'border-black', label:'Sức bền & Tim mạch', img: '/images/thiet_bi_cardio.jpg', kcal: '500-700', level: 'Trung bình' },
+  default: { icon:'🏋️', bg:'bg-white',      text:'text-black', border:'border-neutral-300', label:'Tăng cơ & Sức mạnh', img: '/images/strength_machine.jpg', kcal: '400-600', level: 'Trung bình' }
 }
 
 function getCfg(name: string = '') {
   const n = (name || '').toLowerCase()
   if (n.includes('yoga') || n.includes('pilates')) return CFG.yoga
   if (n.includes('boxing') || n.includes('kick') || n.includes('hiit')) return CFG.boxing
-  if (n.includes('cardio')) return CFG.cardio
+  if (n.includes('cardio') || n.includes('zumba')) return CFG.cardio
   return CFG.default
 }
 
 export default function ClassCard({ cls }: { cls: PublicClass }) {
   const cfg = getCfg(cls.className)
-  const isDark = cfg.bg === 'bg-neutral-900'
-  const headerText = isDark ? 'text-white' : 'text-black'
   
   // Safe access for UI strings
   const className = cls.className || 'Lớp học'
-  const trainerName = cls.trainerName || 'Chưa phân công'
-  const scheduleDayVe = DAY_VI[cls.scheduleDay] || cls.scheduleDay || 'Chưa rõ'
+  const trainerName = cls.trainerName || 'Master Trainer'
+  const scheduleDays = Array.isArray(cls.scheduleDay) ? cls.scheduleDay : [cls.scheduleDay]
+  const dayLabels = scheduleDays.map(d => DAY_VI[d] || d).join(', ')
 
   return (
-    <div className="group bg-white border border-neutral-300 overflow-hidden hover:shadow-lg hover:border-black transition-all duration-300 flex flex-col">
-      <div className={`${cfg.bg} px-5 py-4 flex items-center gap-3 border-b ${cfg.border}`}>
-        <div className={`text-xl w-10 h-10 flex items-center justify-center border ${isDark ? 'bg-black border-neutral-700' : 'bg-white border-neutral-200'}`}>
-          {cfg.icon}
+    <div className="group bg-white border border-neutral-200 overflow-hidden hover:shadow-2xl hover:border-red-600 transition-all duration-500 flex flex-col rounded-xl">
+      {/* Thumbnail */}
+      <div className="relative h-48 overflow-hidden">
+        <img src={cfg.img} alt={className} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
+        <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-3 py-1.5 rounded-sm flex items-center gap-2">
+            <span className="text-red-500">●</span> {cfg.level}
         </div>
-        <div>
-          <h3 className={`font-display text-xl tracking-wider mb-0.5 ${headerText}`}>{className}</h3>
-          <span className={`text-[10px] font-bold uppercase tracking-widest ${cfg.text}`}>{cfg.label}</span>
+        <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent">
+            <h3 className="font-display text-2xl text-white tracking-widest uppercase">{className}</h3>
         </div>
       </div>
-      <div className="p-5 flex flex-col flex-1">
-        <div className="flex flex-wrap gap-2 mb-4">
-          <span className="bg-neutral-100 border border-neutral-200 text-black text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">📅 {scheduleDayVe}</span>
-          <span className="bg-neutral-100 border border-neutral-200 text-black text-[10px] font-bold uppercase tracking-wider px-2.5 py-1">⏱️ {cls.startTime} - {cls.endTime}</span>
+
+      <div className="p-6 flex flex-col flex-1">
+        <div className="flex items-center justify-between mb-6">
+            <div className="space-y-1">
+                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Tiêu hao</p>
+                <p className="text-sm font-black text-black">{cfg.kcal} KCAL</p>
+            </div>
+            <div className="w-px h-8 bg-neutral-100" />
+            <div className="space-y-1 text-right">
+                <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Thời lượng</p>
+                <p className="text-sm font-black text-black">60 PHÚT</p>
+            </div>
         </div>
-        <div className="items-center flex gap-3 mb-5">
-          <div className="w-7 h-7 bg-black flex items-center justify-center text-white text-[10px] font-black shrink-0">
-            {trainerName.charAt(0).toUpperCase()}
-          </div>
-          <p className="text-xs font-bold text-neutral-800">HLV {trainerName}</p>
+
+        <div className="space-y-4 mb-8">
+            <div className="flex items-center gap-3 text-neutral-600">
+                <span className="text-lg">📅</span>
+                <span className="text-[11px] font-bold uppercase tracking-wider">{dayLabels} | {cls.startTime}</span>
+            </div>
+            <div className="flex items-center gap-3">
+                <div className="w-8 h-8 rounded-full bg-red-600 flex items-center justify-center text-white text-[10px] font-black shadow-lg shadow-red-600/20">
+                    {trainerName.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                     <p className="text-[9px] font-black text-neutral-400 uppercase tracking-widest">Huấn luyện viên</p>
+                     <p className="text-[11px] font-black text-black uppercase">{trainerName}</p>
+                </div>
+            </div>
         </div>
-        <Link href={`/register?class=${encodeURIComponent(className)}`} className="mt-auto block text-center text-xs font-black uppercase tracking-widest py-2.5 border-2 border-black text-black hover:bg-black hover:text-white transition-colors">
-          ĐĂNG KÝ HỌC
-        </Link>
+
+        {/* FOMO Status */}
+        <div className="mb-6">
+            <div className="flex justify-between items-end mb-2">
+                <span className="text-[10px] font-black text-black uppercase tracking-widest">Độ lấp đầy</span>
+                <span className="text-[10px] font-black text-red-600 uppercase">Còn 5 chỗ</span>
+            </div>
+            <div className="h-1.5 bg-neutral-100 rounded-full overflow-hidden">
+                <div className="h-full bg-red-600 w-[75%] rounded-full" />
+            </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-3 mt-auto">
+            <Link href="/schedule" className="text-center text-[10px] font-black uppercase tracking-widest py-3 border border-neutral-200 text-neutral-400 hover:border-black hover:text-black transition-all">
+              LỊCH LỚP
+            </Link>
+            <Link href={`/register?class=${encodeURIComponent(className)}`} className="text-center text-[10px] font-black uppercase tracking-widest py-3 bg-black text-white hover:bg-red-600 transition-all shadow-xl shadow-black/10">
+              TẬP THỬ NGAY
+            </Link>
+        </div>
       </div>
     </div>
   )
-}
+}

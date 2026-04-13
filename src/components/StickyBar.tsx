@@ -5,12 +5,25 @@ import Link from 'next/link'
 export default function StickyBar() {
   const [visible, setVisible] = useState(false)
   const [dismissed, setDismissed] = useState(false)
+  const [timeLeft, setTimeLeft] = useState({ h: 2, m: 45, s: 0 })
   const phone = process.env.NEXT_PUBLIC_PHONE || '0901 234 567'
 
   useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(prev => {
+        if (prev.s > 0) return { ...prev, s: prev.s - 1 }
+        if (prev.m > 0) return { ...prev, m: prev.m - 1, s: 59 }
+        if (prev.h > 0) return { ...prev, h: prev.h - 1, m: 59, s: 59 }
+        return prev
+      })
+    }, 1000)
+    
     const handler = () => setVisible(window.scrollY > 600)
     window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
+    return () => {
+        window.removeEventListener('scroll', handler)
+        clearInterval(timer)
+    }
   }, [])
 
   if (dismissed || !visible) return null
@@ -25,19 +38,26 @@ export default function StickyBar() {
               🔥 ƯU ĐÃI: GIẢM 25% + TẶNG 1 BUỔI PT
             </span>
             <span className="text-neutral-500 text-sm">|</span>
-            <span className="text-neutral-400 text-xs font-bold uppercase tracking-wider">CHỈ CÒN <strong className="text-red-500">5 SUẤT</strong></span>
+            <span className="text-neutral-400 text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+              CHỈ CÒN <strong className="text-red-500">5 SUẤT</strong> TRONG 
+              <span className="bg-red-600 text-white px-1.5 py-0.5 font-mono">
+                {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')}
+              </span>
+            </span>
           </div>
 
           <div className="md:hidden flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-none bg-red-600 animate-pulse" />
-            <span className="text-white text-[10px] font-black uppercase tracking-widest">CÒN 5 SUẤT ƯU ĐÃI</span>
+            <span className="text-white text-[10px] font-black uppercase tracking-widest">
+              {String(timeLeft.h).padStart(2, '0')}:{String(timeLeft.m).padStart(2, '0')}:{String(timeLeft.s).padStart(2, '0')} - CÒN 5 SUẤT
+            </span>
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
             <a href={`tel:${phone.replace(/\s/g, '')}`} className="hidden sm:flex items-center gap-2 text-neutral-400 hover:text-white text-xs font-bold transition-colors">
               📞 <span>{phone}</span>
             </a>
-            <Link href="/register" className="bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-widest text-[10px] sm:text-xs py-2 px-4 transition-colors">
+            <Link href="/register" className="bg-red-600 hover:bg-red-700 text-white font-black uppercase tracking-widest text-[10px] sm:text-xs py-3 px-6 transition-all animate-pulse-gentle shadow-[0_0_20px_rgba(220,38,38,0.5)]">
               ĐĂNG KÝ NGAY
             </Link>
             <button onClick={() => setDismissed(true)} className="text-neutral-500 hover:text-white transition-colors p-1" aria-label="Đóng">
