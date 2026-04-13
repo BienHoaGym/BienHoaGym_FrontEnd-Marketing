@@ -16,18 +16,32 @@ const FALLBACK_IMAGES = [
     '/images/PT 1_1.jpg'
 ]
 
+// Lưu trữ các URL đã bị lỗi 404 để không thử lại trong cùng 1 session
+const deadUrls = new Set<string>();
+
 export default function TrainerAvatar({ photo, index = 0, className = "" }: TrainerAvatarProps) {
     const fullPhotoUrl = publicApiService.getFullImageUrl(photo)
     const defaultPlaceholder = FALLBACK_IMAGES[index % FALLBACK_IMAGES.length]
     
-    const [imgSrc, setImgSrc] = useState<string>(defaultPlaceholder)
-    const [isLoaded, setIsLoaded] = useState(false)
+    // Nếu URL đã biết là chết, dùng thẳng placeholder
+    const initialSrc = (fullPhotoUrl && !deadUrls.has(fullPhotoUrl)) ? fullPhotoUrl : defaultPlaceholder;
+    
+    const [imgSrc, setImgSrc] = useState<string>(initialSrc)
+    const [isLoaded, setIsLoaded] = useState(initialSrc === defaultPlaceholder)
 
     useEffect(() => {
-        if (fullPhotoUrl) {
-            setImgSrc(fullPhotoUrl)
-        } else {
+        if (!fullPhotoUrl) {
             setImgSrc(defaultPlaceholder)
+            setIsLoaded(true)
+            return
+        }
+
+        if (deadUrls.has(fullPhotoUrl)) {
+            setImgSrc(defaultPlaceholder)
+            setIsLoaded(true)
+        } else {
+            setImgSrc(fullPhotoUrl)
+            setIsLoaded(false)
         }
     }, [fullPhotoUrl, defaultPlaceholder])
 
@@ -47,8 +61,10 @@ export default function TrainerAvatar({ photo, index = 0, className = "" }: Trai
                 onLoad={() => setIsLoaded(true)}
                 onError={() => {
                     // Nếu ảnh từ backend lỗi, chuyển ngay sang ảnh fallback
-                    if (imgSrc !== defaultPlaceholder) {
-                        setImgSrc(defaultPlaceholder)
+                    if (fullPhotoUrl && imgSrc === fullPhotoUrl) {
+                        deadUrls.add(fullPhotoUrl); // Lưu vào danh sách URL "chết"
+                        setImgSrc(defaultPlaceholder);
+                        setIsLoaded(true);
                     }
                 }}
             />

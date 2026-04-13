@@ -5,6 +5,7 @@ import Footer from '../../components/Footer'
 import Link from 'next/link'
 import { publicApiService, type PublicClass } from '@/../services/publicApi'
 import ScrollReveal from '../../components/ScrollReveal'
+import TrainerAvatar from '@/components/TrainerAvatar'
 
 const DAYS_ORDER = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 const DAYS_VI: Record<string, string> = {
@@ -365,12 +366,8 @@ export default function SchedulePage() {
                 </p>
                 <div className="flex items-center gap-4 p-4 bg-neutral-50 border border-neutral-100">
                   <div className="flex items-center gap-4 p-4 bg-neutral-50 border border-neutral-100">
-                    <div className="w-12 h-12 rounded-full bg-red-600 flex items-center justify-center text-white font-black text-xl shadow-lg shadow-red-600/20 overflow-hidden">
-                      {selectedClass.trainerPhoto ? (
-                        <img src={publicApiService.getFullImageUrl(selectedClass.trainerPhoto)} className="w-full h-full object-cover" alt="HLV" />
-                      ) : (
-                        selectedClass.trainerName ? selectedClass.trainerName.substring(0, 1) : 'H'
-                      )}
+                    <div className="w-16 h-16 rounded-full shadow-lg shadow-red-600/20 overflow-hidden">
+                      <TrainerAvatar photo={selectedClass.trainerPhoto} />
                     </div>
                     <div>
                       <p className="text-[10px] font-black text-neutral-400 uppercase tracking-widest">Huấn luyện viên phụ trách</p>
