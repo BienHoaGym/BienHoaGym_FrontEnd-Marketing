@@ -32,8 +32,12 @@ export default function ClassCard({ cls }: { cls: PublicClass }) {
   // Safe access for UI strings
   const className = cls.className || 'Lớp học'
   const trainerName = cls.trainerName || 'Master Trainer'
-  const scheduleDays = Array.isArray(cls.scheduleDay) ? cls.scheduleDay : [cls.scheduleDay]
-  const dayLabels = scheduleDays.map(d => DAY_VI[d] || d).join(', ')
+  const scheduleDays = Array.isArray(cls.scheduleDay) 
+    ? cls.scheduleDay 
+    : (cls.scheduleDay ? [cls.scheduleDay as string] : [])
+  const dayLabels = scheduleDays.length > 0 
+    ? scheduleDays.map(d => (d && DAY_VI[d]) ? DAY_VI[d] : d).join(', ')
+    : 'Chưa xếp lịch'
 
   return (
     <div className="group bg-white border border-neutral-200 overflow-hidden hover:shadow-2xl hover:border-red-600 transition-all duration-500 flex flex-col rounded-xl">
