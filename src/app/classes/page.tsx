@@ -2,6 +2,7 @@
 import { useEffect, useState, useMemo } from 'react'
 import Navbar from '@/components/Navbar'
 import ClassCard from '@/components/ClassCard'
+import TrainerAvatar from '@/components/TrainerAvatar'
 import Footer from '@/components/Footer'
 import StickyBar from '@/components/StickyBar'
 import ScrollReveal from '@/components/ScrollReveal'
@@ -28,21 +29,6 @@ const TRAINER_UI_PRESETS = [
     { shape: 'B', bgFrom: '#FEF2F2', bgTo: '#FEE2E2', accentColor: '#DC2626' },
 ]
 
-function TrainerAvatar({ photo }: { photo?: string }) {
-    const fullUrl = publicApiService.getFullImageUrl(photo)
-    return (
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-neutral-100">
-            {fullUrl ? (
-                <img src={fullUrl} alt="Trainer" className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
-            ) : (
-                <div className="w-full h-full bg-neutral-200 flex items-center justify-center text-neutral-400">
-                    <span className="text-4xl font-display uppercase">PRO</span>
-                </div>
-            )}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-        </div>
-    )
-}
 
 export default function ClassesPage() {
     const [classes, setClasses] = useState<PublicClass[]>([])
@@ -177,7 +163,7 @@ export default function ClassesPage() {
                                     return (
                                         <ScrollReveal type="up" delay={150 * i} key={t.id} className="group bg-white border border-neutral-200 hover:border-red-600 transition-all shadow-sm rounded-2xl overflow-hidden">
                                             <div className="h-80 overflow-hidden relative">
-                                                <TrainerAvatar photo={t.profilePhoto} />
+                                                <TrainerAvatar photo={t.profilePhoto} index={i} />
                                                 <div className="absolute top-4 left-4 bg-black/80 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-4 py-2 rounded-sm border-l-2 border-red-600">
                                                     {expYear}+ NĂM KINH NGHIỆM
                                                 </div>

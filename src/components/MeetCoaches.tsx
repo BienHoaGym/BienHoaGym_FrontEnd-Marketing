@@ -8,58 +8,7 @@ const TRAINER_UI_PRESETS = [
     { shape: 'B', bgFrom: '#FEF2F2', bgTo: '#FEE2E2', accentColor: '#DC2626' },
 ]
 
-import { useState, useEffect } from 'react'
-
-function TrainerAvatar({ i, photo }: { i: number; photo?: string }) {
-    const fullPhotoUrl = publicApiService.getFullImageUrl(photo)
-    
-    // Fallback images (Local) - Đảm bảo đây là những ảnh chất lượng cao nhất
-    const fallbackImages = [
-        '/images/huan-luyen-vien-the-hinh.jpg',
-        '/images/doi_ngu.jpg',
-        '/images/anh-gai-xinh-ngau-tap-gym-32.jpg',
-        '/images/BIOMECHANICS.jpg',
-        '/images/PT 1_1.jpg'
-    ]
-    
-    const defaultPlaceholder = fallbackImages[i % fallbackImages.length]
-    const [imgSrc, setImgSrc] = useState<string>(defaultPlaceholder)
-    const [isLoaded, setIsLoaded] = useState(false)
-
-    useEffect(() => {
-        if (fullPhotoUrl) {
-            setImgSrc(fullPhotoUrl)
-        } else {
-            setImgSrc(defaultPlaceholder)
-        }
-    }, [fullPhotoUrl, defaultPlaceholder])
-
-    return (
-        <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-neutral-900">
-            {/* Loading Placeholder */}
-            {!isLoaded && (
-                <div className="absolute inset-0 bg-neutral-800 animate-pulse flex items-center justify-center">
-                    <span className="text-white/10 text-4xl font-black">GYM</span>
-                </div>
-            )}
-            
-            <img 
-                src={imgSrc} 
-                alt="Trainer" 
-                className={`w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
-                onLoad={() => setIsLoaded(true)}
-                onError={() => {
-                    // Nếu ảnh từ backend (fullPhotoUrl) lỗi, ngay lập tức dùng ảnh fallback địa phương
-                    if (imgSrc !== defaultPlaceholder) {
-                        setImgSrc(defaultPlaceholder)
-                    }
-                }}
-            />
-            {/* Trang trí thêm cho ảnh HLV */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
-        </div>
-    )
-}
+import TrainerAvatar from './TrainerAvatar'
 
 export default function MeetCoaches({ trainers }: { trainers: PublicTrainer[] }) {
   const displayTrainers = trainers.slice(0, 6)
@@ -80,7 +29,7 @@ export default function MeetCoaches({ trainers }: { trainers: PublicTrainer[] })
               <ScrollReveal key={t.id} delay={i * 200} type="up" className="group bg-black/40 border border-neutral-800 hover:border-red-600 transition-all rounded-2xl overflow-hidden backdrop-blur-sm">
                 <div className="h-72 relative">
                     <TrainerAvatar 
-                        i={i}
+                        index={i}
                         photo={t.profilePhoto}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />
