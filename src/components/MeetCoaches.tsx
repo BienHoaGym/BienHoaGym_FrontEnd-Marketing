@@ -12,11 +12,13 @@ function TrainerAvatar({ shape, bgFrom, bgTo, accentColor, photo }: { shape: str
     const fullPhotoUrl = publicApiService.getFullImageUrl(photo)
     
     if (fullPhotoUrl) {
+        return (
             <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-neutral-100">
                 <img src={fullPhotoUrl} alt="Trainer" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
             </div>
         )
     }
+
 
     const paths: Record<string, JSX.Element> = {
         M: <svg viewBox="0 0 120 160" fill="none" className="w-20 h-28 opacity-90"><circle cx="60" cy="30" r="18" fill={accentColor} /><path d="M30 70 L40 130 Q60 140 80 130 L90 70 Z" fill={accentColor} /></svg>,
