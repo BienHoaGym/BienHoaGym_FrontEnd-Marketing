@@ -1,18 +1,18 @@
 'use client'
-import { useState, useEffect, Suspense } from 'react'
+import React, { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { publicApiService, type PublicPackage } from '@/../services/publicApi'
-import Navbar from '../../components/Navbar'
-import Footer from '../../components/Footer'
+import Navbar from '@/components/Navbar'
+import Footer from '@/components/Footer'
 import Link from 'next/link'
-import ScrollReveal from '../../components/ScrollReveal'
+import ScrollReveal from '@/components/ScrollReveal'
 
 const fmtVND = (n: number) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(n)
 
 function RegisterForm() {
   const searchParams  = useSearchParams()
   const [packages, setPackages] = useState<PublicPackage[]>([])
-  const [form, setForm] = useState({ fullName:'', phoneNumber:'', email:'', packageInterest: searchParams.get('class') ? `Lớp học: ${searchParams.get('class')}` : '', notes:'' })
+  const [form, setForm] = useState({ fullName:'', phoneNumber:'', email:'', packageInterest: '', notes:'' })
   const [errors, setErrors] = useState<Record<string, string>>({})
   const [loading, setLoading] = useState(false)
   const [submitted, setSubmitted] = useState(false)
@@ -21,10 +21,14 @@ function RegisterForm() {
   useEffect(() => { 
     publicApiService.getActivePackages().then(setPackages)
     
-    // Nếu có query param package, tự động set
+    // Đọc query params một cách an toàn ở Client-side
     const pkgName = searchParams.get('package_name')
+    const className = searchParams.get('class')
+    
     if (pkgName) {
       setForm(prev => ({ ...prev, packageInterest: pkgName }))
+    } else if (className) {
+      setForm(prev => ({ ...prev, packageInterest: `Lớp học: ${className}` }))
     }
   }, [searchParams])
 
@@ -110,15 +114,26 @@ function RegisterForm() {
               </div>
 
               <div className="mb-6">
-                <label className="block text-[10px] font-black uppercase tracking-widest text-black mb-2">Gói quan tâm</label>
+                <label className="block text-[10px] font-black uppercase tracking-widest text-black mb-2">Bạn đang quan tâm đến?</label>
                 <select name="packageInterest" value={form.packageInterest} onChange={handleChange}
                   className="w-full bg-white border-2 border-neutral-300 rounded-none px-3 py-3 text-black font-bold uppercase focus:outline-none focus:border-red-600 transition-colors text-xs appearance-none">
-                  <option value="">— CẦN TƯ VẤN THÊM —</option>
-                  {packages.map(p => (
-                    <option key={p.id} value={p.name}>
-                      {p.name} — {fmtVND(p.discountPrice || p.price)}
-                    </option>
-                  ))}
+                  <option value="">— CHỌN MỤC TIÊU / GÓI TẬP —</option>
+                  <optgroup label="SỰ LỰA CHỌN PHỔ BIẾN">
+                    <option value="Tập thử miễn phí">🎁 ĐĂNG KÝ TẬP THỬ MIỄN PHÍ</option>
+                    <option value="Giảm cân cấp tốc">🔥 TƯ VẤN GIẢM CÂN CẤP TỐC</option>
+                    <option value="Tăng cơ - Cải thiện vóc dáng">💪 TĂNG CƠ - CẢI THIỆN VÓC DÁNG</option>
+                    <option value="Lộ trình PT 1-1">💎 LỘ TRÌNH PT 1-1 CÁ NHÂN HÓA</option>
+                    <option value="Lớp Yoga / Group-X">🧘 LỚP HỌC YOGA / GROUP-X</option>
+                    <option value="Boxing / Kick-Boxing">🥊 BOXING & KICK-BOXING</option>
+                  </optgroup>
+                  <optgroup label="GÓI TẬP THÀNH VIÊN">
+                    {packages.map(p => (
+                      <option key={p.id} value={p.name}>
+                        {p.name} — {fmtVND(p.discountPrice || p.price)}
+                      </option>
+                    ))}
+                  </optgroup>
+                  <option value="Tư vấn ngân sách">💰 TƯ VẤN THEO NGÂN SÁCH CÁ NHÂN</option>
                 </select>
               </div>
 

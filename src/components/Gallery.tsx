@@ -16,7 +16,7 @@ export default function Gallery() {
       <div className="max-w-7xl mx-auto px-4">
         <ScrollReveal className="text-center mb-12">
           <p className="text-red-600 text-xs font-black tracking-[0.2em] uppercase mb-1">Hình ảnh thực tế</p>
-          <h2 className="font-display text-4xl md:text-5xl text-black tracking-widest uppercase">KHÔNG GIAN <span className="text-red-600">ĐẲNG CẤP</span></h2>
+          <h2 className="font-display text-4xl md:text-5xl text-black tracking-widest uppercase leading-tight">KHÔNG GIAN <span className="text-red-600">ĐẲNG CẤP</span></h2>
           <p className="text-neutral-500 mt-4 max-w-2xl mx-auto italic">“Mắt thấy, tai nghe, tay chạm” — Khám phá hệ thống máy móc chuẩn quốc tế và tiện ích 5 sao tại Biên Hòa Gym.</p>
         </ScrollReveal>
 

@@ -16,7 +16,7 @@ export default function KnowledgeSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {displayPosts.map((post, i) => (
           <ScrollReveal key={post.id} delay={i * 200} type="up" className="group cursor-pointer">
-            <Link href={`/blog/${post.id}`}>
+            <Link href={`/blog/${post.slug}`}>
                 <div className="relative aspect-[16/10] overflow-hidden rounded-xl mb-6 shadow-sm border border-neutral-100">
                 <img 
                     src={post.image} 
@@ -29,7 +29,7 @@ export default function KnowledgeSection() {
                 </div>
             </Link>
             
-            <Link href={`/blog/${post.id}`}>
+            <Link href={`/blog/${post.slug}`}>
                 <h3 className="text-lg font-black uppercase tracking-tight mb-3 group-hover:text-red-600 transition-colors leading-tight min-h-[50px]">
                 {post.title}
                 </h3>
@@ -37,7 +37,7 @@ export default function KnowledgeSection() {
             <p className="text-neutral-500 text-xs leading-relaxed mb-4 line-clamp-2">
               {post.excerpt}
             </p>
-            <Link href={`/blog/${post.id}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-black border-b border-transparent hover:border-red-600 pb-0.5 transition-all">
+            <Link href={`/blog/${post.slug}`} className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-black border-b border-transparent hover:border-red-600 pb-0.5 transition-all">
               ĐỌC TIẾP <span className="text-red-600">→</span>
             </Link>
           </ScrollReveal>

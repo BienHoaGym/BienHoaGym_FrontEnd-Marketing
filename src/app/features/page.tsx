@@ -126,8 +126,8 @@ export default function FeaturesPage() {
 
       {/* FINAL CTA PARALLAX EXPERIENCE - Simplified Simulation */}
       <section className="relative py-32 bg-black overflow-hidden flex items-center justify-center text-center">
-        <div className="absolute inset-0 opacity-30">
-            <img src="/images/gym_hero.jpg" className="w-full h-full object-cover" alt="Elite Gym" />
+        <div className="absolute inset-0 opacity-40">
+            <img src="/images/kien_thuc_tap_luyen.jpg" className="w-full h-full object-cover" alt="Elite Gym" />
         </div>
         <ScrollReveal className="relative z-10 px-4">
             <h3 className="font-display text-4xl md:text-6xl text-white tracking-widest uppercase mb-8">

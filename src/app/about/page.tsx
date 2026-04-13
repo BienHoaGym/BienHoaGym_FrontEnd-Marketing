@@ -106,7 +106,7 @@ export default function AboutPage() {
         
         <ScrollReveal className="relative z-10 text-center px-4">
           <p className="text-red-600 text-[10px] font-black tracking-[0.6em] uppercase mb-6 drop-shadow-md">Established 2019</p>
-          <h1 className="text-5xl md:text-8xl font-display text-white mb-8 tracking-[0.2em] uppercase leading-tight drop-shadow-2xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-8xl font-display text-white mb-8 tracking-[0.1em] sm:tracking-[0.2em] uppercase leading-[1.1] drop-shadow-2xl break-words">
             VẬN MỆNH<br /><span className="text-red-600">TRONG TAY BẠN</span>
           </h1>
           <p className="text-neutral-200 text-[11px] md:text-sm max-w-2xl mx-auto font-black uppercase tracking-[0.4em] leading-relaxed drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)]">
@@ -119,28 +119,28 @@ export default function AboutPage() {
       <section className="bg-black py-16 border-y border-neutral-900 overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-0">
             <div className="text-center px-4">
-                <div className="text-red-600 font-display text-4xl md:text-5xl mb-3 flex justify-center items-end gap-1">
-                    <CountUp end={800} /> <span className="text-2xl">+</span>
+                <div className="text-red-600 font-display text-3xl md:text-5xl mb-3 flex justify-center items-end gap-1">
+                    <CountUp end={800} /> <span className="text-xl md:text-2xl">+</span>
                 </div>
-                <p className="text-neutral-400 text-xs md:text-sm font-black uppercase tracking-[0.2em]">Hội viên</p>
+                <p className="text-neutral-400 text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Hội viên</p>
             </div>
             <div className="text-center border-l border-neutral-900 px-4">
-                <div className="text-white font-display text-4xl md:text-5xl mb-3 flex justify-center items-end gap-1">
-                    <CountUp end={15} /> <span className="text-2xl">+</span>
+                <div className="text-white font-display text-3xl md:text-5xl mb-3 flex justify-center items-end gap-1">
+                    <CountUp end={15} /> <span className="text-xl md:text-2xl">+</span>
                 </div>
-                <p className="text-neutral-400 text-xs md:text-sm font-black uppercase tracking-[0.2em]">Master Trainer</p>
+                <p className="text-neutral-400 text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Master Trainer</p>
             </div>
-            <div className="text-center border-l border-neutral-900 px-4">
-                <div className="text-white font-display text-4xl md:text-5xl mb-3 flex justify-center items-end gap-0.5">
-                    <CountUp end={800} /> <span className="text-2xl lowercase">m²</span>
+            <div className="text-center border-t md:border-t-0 md:border-l border-neutral-900 pt-8 md:pt-0 px-4">
+                <div className="text-white font-display text-3xl md:text-5xl mb-3 flex justify-center items-end gap-0.5">
+                    <CountUp end={800} /> <span className="text-xl md:text-2xl lowercase">m²</span>
                 </div>
-                <p className="text-neutral-400 text-xs md:text-sm font-black uppercase tracking-[0.2em]">Diện tích</p>
+                <p className="text-neutral-400 text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Diện tích</p>
             </div>
-            <div className="text-center border-l border-neutral-900 px-4">
-                <div className="text-white font-display text-4xl md:text-5xl mb-3 flex justify-center items-end gap-1">
-                    <CountUp end={5} /> <span className="text-2xl">★</span>
+            <div className="text-center border-l md:border-l-0 border-t md:border-t-0 lg:border-l border-neutral-900 pt-8 md:pt-0 px-4">
+                <div className="text-white font-display text-3xl md:text-5xl mb-3 flex justify-center items-end gap-1">
+                    <CountUp end={5} /> <span className="text-xl md:text-2xl">★</span>
                 </div>
-                <p className="text-neutral-400 text-xs md:text-sm font-black uppercase tracking-[0.2em]">Đánh giá</p>
+                <p className="text-neutral-400 text-[10px] md:text-xs font-black uppercase tracking-[0.2em]">Đánh giá</p>
             </div>
         </div>
       </section>
@@ -150,22 +150,31 @@ export default function AboutPage() {
         <div className="max-w-7xl mx-auto px-4">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-24 items-center">
                 <ScrollReveal type="left" className="relative group">
-                    <div className="relative aspect-[16/10] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)]">
-                        <img 
-                            src="/images/doi_ngu.jpg" 
-                            className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
-                            alt="Founder Team" 
-                            style={{ 
-                                transform: `translateY(${scrollY * 0.05 - 60}px)`,
-                                transition: 'transform 0.1s linear'
-                            }}
-                        />
-                        {/* Glassmorphism Quote Overlay */}
-                        <div className="absolute inset-0 flex items-end p-8 lg:p-12">
-                             <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-8 md:p-10 rounded-3xl shadow-2xl max-w-sm">
-                                <p className="text-red-600 text-[10px] font-black tracking-widest uppercase mb-4">Đội ngũ Sáng lập</p>
-                                <p className="text-white text-sm md:text-base italic leading-relaxed font-medium">"Chúng tôi xây dựng dự án này bằng cả trái tim vì một cộng đồng Biên Hòa khỏe mạnh và kỷ luật hơn mỗi ngày."</p>
-                             </div>
+                    <div className="relative flex flex-col gap-8 md:gap-0">
+                        {/* THE PHOTO: No longer obscured on mobile */}
+                        <div className="relative aspect-[16/10] lg:aspect-[4/5] rounded-[2rem] overflow-hidden shadow-[0_50px_100px_-20px_rgba(0,0,0,0.3)]">
+                            <img 
+                                src="/images/doi_ngu.jpg" 
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105" 
+                                alt="Founder Team" 
+                                style={{ 
+                                    transform: `translateY(${scrollY * 0.05 - 60}px)`,
+                                    transition: 'transform 0.1s linear'
+                                }}
+                            />
+                            {/* Glassmorphism Quote Overlay - ONLY FOR LARGE SCREENS */}
+                            <div className="absolute inset-0 hidden lg:flex items-end p-12">
+                                <div className="bg-white/10 backdrop-blur-xl border border-white/20 p-10 rounded-3xl shadow-2xl max-w-xs">
+                                    <p className="text-red-600 text-[10px] font-black tracking-widest uppercase mb-4">Đội ngũ Sáng lập</p>
+                                    <p className="text-white text-sm italic leading-relaxed font-medium">"Chúng tôi xây dựng dự án này bằng cả trái tim vì một cộng đồng Biên Hòa khỏe mạnh và kỷ luật hơn mỗi ngày."</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* MOBILE QUOTE: Dedicated block below the photo */}
+                        <div className="lg:hidden bg-neutral-900 border-l-4 border-red-600 p-8 rounded-2xl shadow-xl">
+                            <p className="text-red-600 text-[10px] font-black tracking-widest uppercase mb-4">Đội ngũ Sáng lập</p>
+                            <p className="text-white text-base italic leading-relaxed font-medium">"Chúng tôi xây dựng dự án này bằng cả trái tim vì một cộng đồng Biên Hòa khỏe mạnh và kỷ luật hơn mỗi ngày."</p>
                         </div>
                     </div>
                 </ScrollReveal>
@@ -247,8 +256,8 @@ export default function AboutPage() {
                       <div className={`text-5xl font-display tracking-widest mb-6 transition-all duration-500 ${activeYear === item.year ? 'text-red-600 opacity-100' : 'text-black opacity-10 group-hover:opacity-40'}`}>
                         {item.year}
                       </div>
-                      <h3 className="text-black text-2xl font-black uppercase tracking-widest mb-6">{item.title}</h3>
-                      <p className="text-neutral-500 text-base font-medium leading-[2.2]">{item.desc}</p>
+                      <h3 className="text-black text-xl md:text-2xl font-black uppercase tracking-widest mb-6 leading-tight">{item.title}</h3>
+                      <p className="text-neutral-500 text-xs md:text-base font-medium leading-relaxed md:leading-[2.2]">{item.desc}</p>
                       
                       {/* Anniversary Photo Reveal */}
                       {activeYear === item.year && (

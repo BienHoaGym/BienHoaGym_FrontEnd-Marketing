@@ -41,11 +41,51 @@ const RECOMMENDATIONS = [
   { title: 'PHÁI ĐẸP & DÁNG XINH', desc: 'Thon gọn, dẻo dai', icon: '🧘', classes: ['Pilates', 'Yoga'] }
 ]
 
+function MobileClassCard({ cls, onClick, theme, icon, target }: { cls: PublicClass; onClick: () => void; theme: string; icon: string; target: string }) {
+    return (
+        <div onClick={onClick} className={`p-5 rounded-2xl border-2 shadow-sm transition-all active:scale-95 flex flex-col gap-3 ${theme}`}>
+            <div className="flex justify-between items-start">
+                <div>
+                    <span className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-1 block">Lớp học</span>
+                    <h4 className="text-xl font-black uppercase tracking-tight leading-tight">{cls.className}</h4>
+                </div>
+                <div className="text-2xl">{icon}</div>
+            </div>
+            
+            <div className="flex items-center gap-4 py-3 border-y border-black/5">
+                <div className="flex flex-col">
+                    <span className="text-[9px] font-black uppercase opacity-40">Thời gian</span>
+                    <span className="text-sm font-black italic">{cls.startTime} - {cls.endTime}</span>
+                </div>
+                <div className="w-px h-8 bg-black/5" />
+                <div className="flex flex-col">
+                    <span className="text-[9px] font-black uppercase opacity-40">Trình trạng</span>
+                    {cls.isFull ? 
+                        <span className="text-[10px] text-red-600 font-black">LỚP ĐÃ ĐẦY</span> : 
+                        <span className="text-[10px] text-green-600 font-black animate-pulse">CÒN CHỖ TRỐNG</span>
+                    }
+                </div>
+            </div>
+
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-black/5 flex items-center justify-center font-black text-[10px]">
+                        {cls.trainerName?.substring(0, 1) || 'H'}
+                    </div>
+                    <span className="text-[10px] font-black uppercase tracking-widest">{cls.trainerName || 'Master'}</span>
+                </div>
+                <span className="text-red-600 text-[10px] font-black uppercase tracking-widest">ĐĂNG KÝ →</span>
+            </div>
+        </div>
+    )
+}
+
 export default function SchedulePage() {
   const [classes, setClasses] = useState<PublicClass[]>([])
   const [loading, setLoading] = useState(true)
   const [filterCat, setFilterCat] = useState('Tất cả')
   const [filterLevel, setFilterLevel] = useState('Mọi cấp độ')
+  const [filterDay, setFilterDay] = useState('Monday') // Mặc định là Thứ 2
   const [selectedClass, setSelectedClass] = useState<PublicClass | null>(null)
 
   useEffect(() => {
@@ -168,79 +208,128 @@ export default function SchedulePage() {
         </div>
       </section>
 
-      {/* MAIN SCHEDULE GRID */}
-      <section className="py-20 bg-white px-4">
-        <div className="max-w-7xl mx-auto overflow-x-auto pb-8">
+      {/* MAIN SCHEDULE CONTAINER */}
+      <section className="py-12 md:py-20 bg-white px-4">
+        <div className="max-w-7xl mx-auto">
           {loading ? (
             <div className="text-center py-40 text-neutral-400 font-black uppercase tracking-[0.3em] animate-pulse">Hệ thống đang đồng bộ dữ liệu lớp học...</div>
           ) : (
-            <div className="min-w-[1100px] border border-neutral-100 shadow-2xl rounded-2xl overflow-hidden">
-              <div className="grid grid-cols-[140px_repeat(7,1fr)] bg-black">
-                <div className="p-6 bg-neutral-900 border-r border-white/5 font-black text-[10px] text-white/50 uppercase tracking-widest flex items-center justify-center">GRID TIME</div>
-                {DAYS_ORDER.map(day => (
-                  <div key={day} className="p-6 text-center text-white font-black text-[12px] uppercase tracking-widest border-r border-white/5">{DAYS_VI[day]}</div>
-                ))}
-              </div>
+            <>
+              {/* MOBILE VIEW: Day Selector + Vertical List */}
+              <div className="md:hidden">
+                <div className="flex overflow-x-auto gap-2 pb-6 no-scrollbar sticky top-[140px] bg-white z-20 pt-2 mb-4 border-b border-neutral-50 px-2">
+                  {DAYS_ORDER.map(day => (
+                    <button
+                      key={day}
+                      onClick={() => setFilterDay(day)}
+                      className={`flex-none px-6 py-4 rounded-xl border-2 transition-all flex flex-col items-center min-w-[100px] ${filterDay === day ? 'bg-red-600 border-red-600 text-white shadow-lg shadow-red-600/20' : 'bg-neutral-50 border-neutral-100 text-neutral-400 font-black'}`}
+                    >
+                      <span className="text-[10px] uppercase tracking-widest leading-none mb-1 opacity-60">Thứ</span>
+                      <span className="text-xl font-display">{DAYS_VI[day].split(' ')[1] || 'CN'}</span>
+                    </button>
+                  ))}
+                </div>
 
-              {TIME_SLOTS.map(slot => (
-                <div key={slot.label} className="grid grid-cols-[140px_repeat(7,1fr)] border-b border-neutral-100 min-h-[160px]">
-                  <div className="p-6 bg-neutral-50 border-r border-neutral-100 flex flex-col items-center justify-center text-center">
-                    <span className="text-black font-black text-[12px] uppercase tracking-widest mb-1 leading-tight">{slot.label}</span>
-                    <span className="text-neutral-400 text-[10px] font-bold uppercase tracking-widest opacity-60">{slot.range}</span>
-                  </div>
-
-                  {DAYS_ORDER.map(day => {
-                    const slotClasses = getClassesForSlot(day, slot)
+                <div className="space-y-4">
+                  {TIME_SLOTS.map(slot => {
+                    const slotClasses = getClassesForSlot(filterDay, slot)
+                    if (slotClasses.length === 0) return null
                     return (
-                      <div key={day} className="p-3 border-r border-neutral-100 bg-white hover:bg-neutral-50/30 transition-colors">
-                        <div className="space-y-4">
-                          {slotClasses.map(cls => {
-                            const theme = getClassTheme(cls.className)
-                            const icon = getIcon(cls.className)
-                            return (
-                              <div
-                                key={cls.id}
-                                onClick={() => handleBook(cls)}
-                                className={`p-4 border shadow-sm cursor-pointer hover:shadow-xl hover:border-red-600 transition-all group relative overflow-hidden ${theme}`}
-                              >
-                                <div className="absolute top-0 right-0 p-1 opacity-20 group-hover:opacity-100 transition-opacity text-xl">{icon}</div>
-                                <p className="font-black uppercase text-[12px] tracking-wider mb-2 leading-tight group-hover:text-red-600 transition-colors">{cls.className}</p>
-
-                                <div className="flex items-center justify-between mb-3 border-b border-black/5 pb-2">
-                                  <span className="text-[10px] font-black italic">{cls.startTime} - {cls.endTime}</span>
-                                  {cls.isFull ?
-                                    <span className="text-[9px] bg-red-600 text-white px-1.5 py-0.5 font-black">FULL</span> :
-                                    <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 font-black animate-pulse shadow-sm shadow-green-600/20">CÒN CHỖ</span>
-                                  }
-                                </div>
-
-                                <p className="text-[9px] font-black text-black/40 uppercase mb-3 flex items-center gap-1.5 line-clamp-1">
-                                  <span className="text-red-600 text-[12px]">🎯</span> {getTargetAudience(cls.className)}
-                                </p>
-
-                                <div className="flex items-center justify-between mt-auto">
-                                  <div className="text-[9px] font-black text-black/60 uppercase tracking-widest flex items-center gap-1.5">
-                                    <div className="w-5 h-5 rounded-full bg-red-600/10 flex items-center justify-center text-red-600 font-black">
-                                      {cls.trainerName ? cls.trainerName.substring(0, 1) : 'H'}
-                                    </div>
-                                    {cls.trainerName?.split(' ').pop() || 'Master'}
-                                  </div>
-                                  <span className="text-[8px] font-bold text-neutral-400 italic">25+ Tham gia</span>
-                                </div>
-
-                                <div className="mt-4 pt-3 border-t border-black/5 flex justify-center translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
-                                  <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 underline underline-offset-4">XEM CHI TIẾT & ĐĂNG KÝ →</span>
-                                </div>
-                              </div>
-                            )
-                          })}
+                        <div key={slot.label} className="mt-8">
+                            <div className="flex items-center gap-3 mb-6 bg-black p-4 rounded-xl">
+                                <span className="bg-red-600 text-white px-3 py-1 text-[10px] font-black uppercase tracking-widest">{slot.label}</span>
+                                <span className="text-white text-[10px] font-bold uppercase tracking-[0.2em]">{slot.range}</span>
+                            </div>
+                            <div className="space-y-4">
+                                {slotClasses.map(cls => (
+                                    <MobileClassCard 
+                                        key={cls.id} 
+                                        cls={cls} 
+                                        onClick={() => handleBook(cls)}
+                                        theme={getClassTheme(cls.className)}
+                                        icon={getIcon(cls.className)}
+                                        target={getTargetAudience(cls.className)}
+                                    />
+                                ))}
+                            </div>
                         </div>
-                      </div>
                     )
                   })}
+                  {DAYS_ORDER.every(d => TIME_SLOTS.every(s => getClassesForSlot(filterDay, s).length === 0)) && (
+                    <div className="py-20 text-center border-2 border-dashed border-neutral-100 rounded-3xl">
+                        <p className="text-neutral-400 text-xs font-black uppercase tracking-widest">Không có lớp học nào phù hợp</p>
+                    </div>
+                  )}
                 </div>
-              ))}
-            </div>
+              </div>
+
+              {/* DESKTOP VIEW: Legacy Grid */}
+              <div className="hidden md:block overflow-x-auto pb-8">
+                <div className="min-w-[1100px] border border-neutral-100 shadow-2xl rounded-2xl overflow-hidden">
+                    <div className="grid grid-cols-[140px_repeat(7,1fr)] bg-black">
+                        <div className="p-6 bg-neutral-900 border-r border-white/5 font-black text-[10px] text-white/50 uppercase tracking-widest flex items-center justify-center">GRID TIME</div>
+                        {DAYS_ORDER.map(day => (
+                            <div key={day} className="p-6 text-center text-white font-black text-[12px] uppercase tracking-widest border-r border-white/5">{DAYS_VI[day]}</div>
+                        ))}
+                    </div>
+
+                    {TIME_SLOTS.map(slot => (
+                        <div key={slot.label} className="grid grid-cols-[140px_repeat(7,1fr)] border-b border-neutral-100 min-h-[160px]">
+                            <div className="p-6 bg-neutral-50 border-r border-neutral-100 flex flex-col items-center justify-center text-center">
+                                <span className="text-black font-black text-[12px] uppercase tracking-widest mb-1 leading-tight">{slot.label}</span>
+                                <span className="text-neutral-400 text-[10px] font-bold uppercase tracking-widest opacity-60">{slot.range}</span>
+                            </div>
+
+                            {DAYS_ORDER.map(day => {
+                                const slotClasses = getClassesForSlot(day, slot)
+                                return (
+                                <div key={day} className="p-3 border-r border-neutral-100 bg-white hover:bg-neutral-50/30 transition-colors">
+                                    <div className="space-y-4">
+                                    {slotClasses.map(cls => (
+                                        <div
+                                            key={cls.id}
+                                            onClick={() => handleBook(cls)}
+                                            className={`p-4 border shadow-sm cursor-pointer hover:shadow-xl hover:border-red-600 transition-all group relative overflow-hidden ${getClassTheme(cls.className)}`}
+                                        >
+                                            <div className="absolute top-0 right-0 p-1 opacity-20 group-hover:opacity-100 transition-opacity text-xl">{getIcon(cls.className)}</div>
+                                            <p className="font-black uppercase text-[12px] tracking-wider mb-2 leading-tight group-hover:text-red-600 transition-colors">{cls.className}</p>
+
+                                            <div className="flex items-center justify-between mb-3 border-b border-black/5 pb-2">
+                                            <span className="text-[10px] font-black italic">{cls.startTime} - {cls.endTime}</span>
+                                            {cls.isFull ?
+                                                <span className="text-[9px] bg-red-600 text-white px-1.5 py-0.5 font-black">FULL</span> :
+                                                <span className="text-[9px] bg-green-600 text-white px-1.5 py-0.5 font-black animate-pulse shadow-sm shadow-green-600/20">CÒN CHỖ</span>
+                                            }
+                                            </div>
+
+                                            <p className="text-[9px] font-black text-black/40 uppercase mb-3 flex items-center gap-1.5 line-clamp-1">
+                                            <span className="text-red-600 text-[12px]">🎯</span> {getTargetAudience(cls.className)}
+                                            </p>
+
+                                            <div className="flex items-center justify-between mt-auto">
+                                            <div className="text-[9px] font-black text-black/60 uppercase tracking-widest flex items-center gap-1.5">
+                                                <div className="w-5 h-5 rounded-full bg-red-600/10 flex items-center justify-center text-red-600 font-black">
+                                                {cls.trainerName ? cls.trainerName.substring(0, 1) : 'H'}
+                                                </div>
+                                                {cls.trainerName?.split(' ').pop() || 'Master'}
+                                            </div>
+                                            <span className="text-[8px] font-bold text-neutral-400 italic">25+ Tham gia</span>
+                                            </div>
+
+                                            <div className="mt-4 pt-3 border-t border-black/5 flex justify-center translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                                            <span className="text-[10px] font-black uppercase tracking-[0.2em] text-red-600 underline underline-offset-4">XEM NGAY →</span>
+                                            </div>
+                                        </div>
+                                    ))}
+                                    </div>
+                                </div>
+                                )
+                            })}
+                        </div>
+                    ))}
+                </div>
+              </div>
+            </>
           )}
         </div>
       </section>

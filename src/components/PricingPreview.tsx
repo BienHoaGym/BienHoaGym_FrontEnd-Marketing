@@ -24,7 +24,7 @@ export default function PricingPreview({ packages }: { packages: PublicPackage[]
             const isFeatured = i === 1 // Gói ở giữa là featured
             return (
               <ScrollReveal key={pkg.id} delay={i * 150} type="up" 
-                className={`p-8 border-2 transition-all flex flex-col h-full ${isFeatured ? 'bg-black text-white border-red-600 shadow-2xl scale-105 z-10' : 'bg-white text-black border-neutral-100 hover:border-black'}`}>
+                className={`p-8 border-2 transition-all flex flex-col h-full ${isFeatured ? 'bg-black text-white border-red-600 shadow-2xl md:scale-105 z-10' : 'bg-white text-black border-neutral-100 hover:border-black'}`}>
                 
                 {isFeatured && (
                   <div className="flex gap-2 mb-4">

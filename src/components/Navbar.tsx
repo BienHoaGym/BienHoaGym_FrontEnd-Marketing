@@ -25,15 +25,15 @@ export default function Navbar() {
         <div className="flex items-center justify-between h-full">
 
           {/* LEFT: Logo & Brand */}
-          <Link href="/" className="flex items-center gap-3 group shrink-0">
-            <div className="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center p-0.5 group-hover:rotate-12 transition-transform shadow-lg">
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-3 group shrink-0">
+            <div className="w-8 h-8 sm:w-12 sm:h-12 bg-red-600 rounded-full flex items-center justify-center p-0.5 group-hover:rotate-12 transition-transform shadow-lg">
                 <img src="/images/logo_circle.jpg" alt="Logo" className="w-full h-full object-cover rounded-full" />
             </div>
             <div className="flex flex-col">
-                <span className="font-display text-xl tracking-tighter leading-none font-black text-black">
+                <span className="font-display text-[10px] sm:text-xl tracking-tighter leading-none font-black text-black">
                     BIEN HOA <span className="text-red-600">GYM</span>
                 </span>
-                <span className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">Elite Fitness</span>
+                <span className="text-[7px] sm:text-[10px] font-black uppercase tracking-[0.2em] text-neutral-400">Elite Fitness</span>
             </div>
           </Link>
 
@@ -54,7 +54,7 @@ export default function Navbar() {
           </div>
 
           {/* RIGHT: Hotline, Login, CTA */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 sm:gap-4">
             {/* Hotline (Always visible on large screens) */}
             <a 
               href={`tel:${phone.replace(/\s/g, '')}`} 
@@ -66,20 +66,12 @@ export default function Navbar() {
 
             <div className="h-8 w-px bg-neutral-100 hidden md:block mx-1"></div>
 
-            {/* Login Link */}
-            <a 
-              href={loginUrl} 
-              className="hidden lg:block text-[11px] font-black uppercase tracking-widest text-neutral-500 hover:text-black transition-colors"
-            >
-              Đăng nhập
-            </a>
-
-            {/* Main CTA - Visible on Mobile too to increase conversion */}
+            {/* Main CTA - Ultra compact on Mobile */}
             <Link 
               href="/register" 
-              className="bg-red-600 hover:bg-black text-white font-black uppercase tracking-widest px-6 py-3 text-[11px] transition-all shadow-[0_4px_15px_rgba(220,38,38,0.3)] hover:shadow-none"
+              className="bg-red-600 hover:bg-black text-white font-black uppercase tracking-widest px-2.5 py-2 sm:px-8 sm:py-3.5 text-[8px] sm:text-[12px] transition-all shadow-[0_5px_15px_rgba(220,38,38,0.3)] whitespace-nowrap shrink-0"
             >
-              Đăng ký ngay
+              Tham Gia Ngay
             </Link>
 
             {/* Mobile Toggle */}
@@ -108,13 +100,13 @@ export default function Navbar() {
               </Link>
             ))}
             
-            <div className="mt-6 flex flex-col gap-4">
-                <a href={`tel:${phone.replace(/\s/g, '')}`} className="flex items-center justify-center gap-3 bg-neutral-100 py-4 font-black uppercase tracking-widest text-xs">
-                    📞 {phone}
+            <div className="mt-8 flex flex-col gap-4">
+                <a href={`tel:${phone.replace(/\s/g, '')}`} className="flex items-center justify-center gap-3 bg-red-600 text-white py-5 font-black uppercase tracking-widest text-xs shadow-xl">
+                    📞 GỌI TƯ VẤN: {phone}
                 </a>
-                <a href={loginUrl} className="text-center font-black uppercase tracking-widest text-[10px] text-neutral-400 py-2">
-                    Đối tác & Nhân viên Đăng nhập
-                </a>
+                <Link href="/register" onClick={() => setOpen(false)} className="text-center bg-black text-white py-5 font-black uppercase tracking-widest text-xs shadow-xl">
+                    THAM GIA NGAY
+                </Link>
             </div>
           </div>
         </div>

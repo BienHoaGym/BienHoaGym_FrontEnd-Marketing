@@ -8,26 +8,55 @@ const TRAINER_UI_PRESETS = [
     { shape: 'B', bgFrom: '#FEF2F2', bgTo: '#FEE2E2', accentColor: '#DC2626' },
 ]
 
-function TrainerAvatar({ shape, bgFrom, bgTo, accentColor, photo }: { shape: string; bgFrom: string; bgTo: string; accentColor: string; photo?: string }) {
+import { useState, useEffect } from 'react'
+
+function TrainerAvatar({ i, photo }: { i: number; photo?: string }) {
     const fullPhotoUrl = publicApiService.getFullImageUrl(photo)
     
-    if (fullPhotoUrl) {
-        return (
-            <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-neutral-100">
-                <img src={fullPhotoUrl} alt="Trainer" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
-            </div>
-        )
-    }
+    // Fallback images (Local) - Đảm bảo đây là những ảnh chất lượng cao nhất
+    const fallbackImages = [
+        '/images/huan-luyen-vien-the-hinh.jpg',
+        '/images/doi_ngu.jpg',
+        '/images/anh-gai-xinh-ngau-tap-gym-32.jpg',
+        '/images/BIOMECHANICS.jpg',
+        '/images/PT 1_1.jpg'
+    ]
+    
+    const defaultPlaceholder = fallbackImages[i % fallbackImages.length]
+    const [imgSrc, setImgSrc] = useState<string>(defaultPlaceholder)
+    const [isLoaded, setIsLoaded] = useState(false)
 
+    useEffect(() => {
+        if (fullPhotoUrl) {
+            setImgSrc(fullPhotoUrl)
+        } else {
+            setImgSrc(defaultPlaceholder)
+        }
+    }, [fullPhotoUrl, defaultPlaceholder])
 
-    const paths: Record<string, JSX.Element> = {
-        M: <svg viewBox="0 0 120 160" fill="none" className="w-20 h-28 opacity-90"><circle cx="60" cy="30" r="18" fill={accentColor} /><path d="M30 70 L40 130 Q60 140 80 130 L90 70 Z" fill={accentColor} /></svg>,
-        Y: <svg viewBox="0 0 120 160" fill="none" className="w-16 h-24 opacity-90"><circle cx="60" cy="25" r="15" fill={accentColor} /><path d="M40 45 Q60 40 80 45 L75 90 Q60 95 45 90 Z" fill={accentColor} /></svg>,
-        B: <svg viewBox="0 0 120 160" fill="none" className="w-16 h-24 opacity-90"><circle cx="55" cy="25" r="16" fill={accentColor} /><path d="M35 55 Q55 50 75 55 L70 100 Q55 105 40 100 Z" fill={accentColor} /></svg>,
-    }
     return (
-        <div className="relative w-full h-full flex items-end justify-center overflow-hidden" style={{ background: `linear-gradient(160deg, ${bgFrom} 0%, ${bgTo} 100%)` }}>
-            <div className="relative z-10 pb-2 group-hover:scale-105 transition-transform duration-500">{paths[shape] ?? paths.M}</div>
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-neutral-900">
+            {/* Loading Placeholder */}
+            {!isLoaded && (
+                <div className="absolute inset-0 bg-neutral-800 animate-pulse flex items-center justify-center">
+                    <span className="text-white/10 text-4xl font-black">GYM</span>
+                </div>
+            )}
+            
+            <img 
+                src={imgSrc} 
+                alt="Trainer" 
+                className={`w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                onLoad={() => setIsLoaded(true)}
+                onError={() => {
+                    // Nếu ảnh từ backend (fullPhotoUrl) lỗi, ngay lập tức dùng ảnh fallback địa phương
+                    if (imgSrc !== defaultPlaceholder) {
+                        setImgSrc(defaultPlaceholder)
+                    }
+                }}
+            />
+            {/* Trang trí thêm cho ảnh HLV */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-60 group-hover:opacity-40 transition-opacity" />
         </div>
     )
 }
@@ -51,10 +80,7 @@ export default function MeetCoaches({ trainers }: { trainers: PublicTrainer[] })
               <ScrollReveal key={t.id} delay={i * 200} type="up" className="group bg-black/40 border border-neutral-800 hover:border-red-600 transition-all rounded-2xl overflow-hidden backdrop-blur-sm">
                 <div className="h-72 relative">
                     <TrainerAvatar 
-                        shape={preset.shape}
-                        bgFrom={preset.bgFrom}
-                        bgTo={preset.bgTo}
-                        accentColor={preset.accentColor}
+                        i={i}
                         photo={t.profilePhoto}
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-60" />

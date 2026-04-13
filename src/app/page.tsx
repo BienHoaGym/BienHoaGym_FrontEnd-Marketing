@@ -83,7 +83,7 @@ export default async function HomePage() {
         <div className="max-w-6xl mx-auto px-4 mb-24">
           <ScrollReveal className="text-center mb-16">
             <p className="text-red-600 text-xs font-black tracking-[0.2em] uppercase mb-1">Cộng đồng hội viên</p>
-            <h2 className="font-display text-4xl md:text-5xl text-black tracking-widest uppercase">KẾT QUẢ <span className="text-red-600">THỰC TẾ</span></h2>
+            <h2 className="font-display text-4xl md:text-5xl text-black tracking-widest uppercase leading-tight">KẾT QUẢ <span className="text-red-600">THỰC TẾ</span></h2>
           </ScrollReveal>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t, i) => (
@@ -112,7 +112,10 @@ export default async function HomePage() {
 
       {/* 8. FINAL ACTION - Tăng Padding và chỉnh sửa nút CTA cho đồng nhất */}
       <section className="py-32 bg-black relative overflow-hidden text-center border-t-[8px] border-red-600">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/20 via-black to-black z-0" />
+        <div className="absolute inset-0 opacity-40 z-0">
+          <img src="/images/kien_thuc_tap_luyen.jpg" className="w-full h-full object-cover grayscale" alt="Background" />
+        </div>
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-900/20 via-black to-black z-[1]" />
         <ScrollReveal className="relative z-10 max-w-3xl mx-auto px-4">
           <h2 className="font-display text-5xl md:text-7xl text-white mb-6 tracking-widest uppercase leading-none">THAY ĐỔI<br /><span className="text-red-600">BẮT ĐẦU TỪ ĐÂY</span></h2>
           <p className="text-neutral-400 text-sm md:text-base mb-10 font-medium max-w-lg mx-auto">Gia nhập cộng đồng 500+ hội viên đang lột xác mỗi ngày tại 173 Nguyễn Ái Quốc, Biên Hòa.</p>
