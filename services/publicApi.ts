@@ -2,7 +2,8 @@
 // services/publicApi.ts
 // ✅ Dùng đúng /api/Public/* endpoints (không cần auth)
 
-const BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:10001/api'
+// Ưu tiên biến môi trường từ Vercel/Hosting, nếu không có mới dùng fallback
+const BASE = process.env.NEXT_PUBLIC_API_URL || 'https://bienhoagym-backend.onrender.com/api'
 
 type FetchOptions = { revalidate?: number; cache?: RequestCache }
 

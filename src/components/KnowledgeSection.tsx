@@ -9,7 +9,7 @@ const BLOG_POSTS = [
     tagColor: 'bg-green-600',
     title: 'Ăn sáng gì ở Biên Hòa để đủ chất đi tập?',
     excerpt: 'Khám phá những món ăn sáng quen thuộc tại Biên Hòa nhưng vẫn đảm bảo macro cho người tập gym...',
-    image: '/gym_nutrition_blog_1776058974060.png'
+    image: '/images/blog/nutrition.png'
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const BLOG_POSTS = [
     tagColor: 'bg-red-600',
     title: 'Lỗi sai phổ biến khi tập Squat & Cách khắc phục',
     excerpt: 'Đừng để đầu gối của bạn phải trả giá. Học ngay kỹ thuật Squat chuẩn từ đội ngũ Master Trainer...',
-    image: '/gym_technique_blog_1776058992859.png'
+    image: '/images/blog/technique.png'
   },
   {
     id: 3,
@@ -25,7 +25,7 @@ const BLOG_POSTS = [
     tagColor: 'bg-amber-500',
     title: 'Duy trì việc tập luyện khi công việc bận rộn',
     excerpt: 'Bí quyết quản lý thời gian và giữ vững động lực cho những người bận rộn tại thành phố Biên Hòa...',
-    image: '/gym_lifestyle_blog_1776059011372.png'
+    image: '/images/blog/lifestyle.png'
   }
 ]
 
@@ -57,7 +57,7 @@ export default function KnowledgeSection() {
             <p className="text-neutral-500 text-xs leading-relaxed mb-4 line-clamp-2">
               {post.excerpt}
             </p>
-            <Link href="#" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-black border-b border-transparent hover:border-red-600 pb-0.5 transition-all">
+            <Link href="/blog" className="inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-[0.2em] text-black border-b border-transparent hover:border-red-600 pb-0.5 transition-all">
               ĐỌC TIẾP <span className="text-red-600">→</span>
             </Link>
           </ScrollReveal>
@@ -65,7 +65,7 @@ export default function KnowledgeSection() {
       </div>
       
       <div className="mt-12 text-center">
-        <Link href="#" className="inline-block bg-neutral-900 text-white px-8 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 transition-all shadow-xl">
+        <Link href="/blog" className="inline-block bg-neutral-900 text-white px-8 py-3 text-[10px] font-black uppercase tracking-widest hover:bg-red-600 transition-all shadow-xl">
           TẤT CẢ BÀI VIẾT
         </Link>
       </div>

@@ -1,6 +1,6 @@
 'use client'
 import ScrollReveal from './ScrollReveal'
-import type { PublicTrainer } from '../../services/publicApi'
+import { publicApiService, type PublicTrainer } from '../../services/publicApi'
 
 const TRAINER_UI_PRESETS = [
     { shape: 'M', bgFrom: '#E5E5E5', bgTo: '#FFFFFF', accentColor: '#000000' },
@@ -9,12 +9,9 @@ const TRAINER_UI_PRESETS = [
 ]
 
 function TrainerAvatar({ shape, bgFrom, bgTo, accentColor, photo }: { shape: string; bgFrom: string; bgTo: string; accentColor: string; photo?: string }) {
-    if (photo) {
-        const fullPhotoUrl = photo.startsWith('http') 
-            ? photo 
-            : (process.env.NEXT_PUBLIC_MANAGEMENT_API_URL || 'http://localhost:10000') + photo
-
-        return (
+    const fullPhotoUrl = publicApiService.getFullImageUrl(photo)
+    
+    if (fullPhotoUrl) {
             <div className="relative w-full h-full flex items-center justify-center overflow-hidden bg-neutral-100">
                 <img src={fullPhotoUrl} alt="Trainer" className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110" />
             </div>
